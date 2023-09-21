@@ -1,3 +1,5 @@
+import { db } from '../firebase/config';
+
 import{
     getAuth,
     createUserWithEmailAndPassword,
@@ -73,13 +75,8 @@ export const useAuthentication = () => {
         setError(false);
 
         try {
-            const {user} = await signInWithEmailAndPassword(
-                auth,
-                data.email,
-                data.password
-            );
+            await signInWithEmailAndPassword(auth, data.email, data.password);
             setLoading(false);
-            return user;
 
         } catch (err) {
             let systemErrorMessage;
