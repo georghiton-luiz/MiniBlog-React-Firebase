@@ -79,16 +79,14 @@ export const useAuthentication = () => {
             setLoading(false);
 
         } catch (err) {
-            let systemErrorMessage;
 
             if (err.message.includes('user-not-found')) {
-                systemErrorMessage = 'Usuário não encontrado.'
+                setError('Usuário não encontrado.')
             }else if (err.message.includes('wrong-password')) {
-                systemErrorMessage = 'Senha incorreta.'
+                setError('Senha incorreta.')
             }else{
-                systemErrorMessage = 'Ocorreu um erro, por favor tente mais tarde.'
-            }            
-            setError(systemErrorMessage);
+                setError('Ocorreu um erro, por favor tente mais tarde.')
+            }
             setLoading(false);
         }
     }
