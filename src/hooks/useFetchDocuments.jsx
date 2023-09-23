@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
 import {db} from '../firebase/config'
-import { onSnapshot, query, orderBy, where } from 'firebase/firestore';
-import {collection} from 'firebase/firestore/lite'
+import { collection, onSnapshot, query, orderBy, where } from 'firebase/firestore';
 
 export const useFetchDocuments = (docCollection, search = null, uid = null) => {
     const [documents, setDocuments] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(null);
-    const [loadingData, setLoadingData] = useState(true);
 
     //deal with memory leak
     const [cancelled, setCancelled] = useState(false);
@@ -22,7 +20,7 @@ export const useFetchDocuments = (docCollection, search = null, uid = null) => {
             const collectionRef = await collection(db, docCollection);
 
             try {
-                let q = await query(collectionRef, orderBy('createAt', 'desc'));
+                let q = await query(collectionRef, orderBy('createdAt', 'desc'));
 
                 //busca
                 //dashboard
