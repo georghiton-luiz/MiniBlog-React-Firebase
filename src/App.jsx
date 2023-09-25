@@ -20,6 +20,7 @@ import RegisterPage from './pages/Register/RegisterPage';
 import CreatePostPage from './pages/CreatePost/CreatePostPage';
 import DashboardPage from './pages/Dashboard/DashboardPage';
 import SearchPage from './pages/Search/SearchPage';
+import PostPage from './pages/Post/PostPage';
 
 function App() {
 
@@ -49,6 +50,7 @@ function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/search" element={<SearchPage />} />
+              <Route path='/posts/:id' element={<PostPage />} />
               <Route
                 path="/login"
                 element={!user ? <LoginPage /> : <Navigate to="/" />}
