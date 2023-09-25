@@ -1,56 +1,68 @@
 import { useState, useEffect } from "react";
-import {db} from '../firebase/config'
-import { collection, onSnapshot, query, orderBy, where } from 'firebase/firestore';
+import { db } from "../firebase/config";
+import {
+  collection,
+  onSnapshot,
+  query,
+  orderBy,
+  where,
+} from "firebase/firestore";
 
 export const useFetchDocuments = (docCollection, search = null, uid = null) => {
-    const [documents, setDocuments] = useState(null);
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(null);
+  const [documents, setDocuments] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(null);
 
-    //deal with memory leak
-    const [cancelled, setCancelled] = useState(false);
+  //deal with memory leak
+  const [cancelled, setCancelled] = useState(false);
 
-    useEffect(() => {
+  useEffect(() => {
+    async function loadData() {
+      if (cancelled) return;
 
-        async function loadData() {
-            if (cancelled) return;
+      setLoading(true);
 
-            setLoading(true);
+      const collectionRef = await collection(db, docCollection);
 
-            const collectionRef = await collection(db, docCollection);
+      try {
+        let q;
 
-            try {
-                let q = await query(collectionRef, orderBy('createdAt', 'desc'));
-
-                //busca
-                //dashboard
-                
-                await onSnapshot(q, (querySnapshot) => {
-                    setDocuments(
-                        querySnapshot.docs.map((doc) => ({
-                            id: doc.id,
-                            ...doc.data(),
-                        }))
-                    );
-                });
-                setLoading(false);
-                
-            } catch (error) {
-                console.log(documents)
-                console.log(error);
-                setError(error.message);
-
-                setLoading(false);
-            }            
+        if (search) {
+          q = await query(
+            collectionRef,
+            where("tags", "array-contains", search),
+            orderBy("createdAt", "desc")
+          );
+        } else {
+          q = await query(collectionRef, orderBy("createdAt", "desc"));
         }
 
-        loadData();
+        //busca
+        //dashboard
 
-    }, [docCollection, search, uid, cancelled]);
+        await onSnapshot(q, (querySnapshot) => {
+          setDocuments(
+            querySnapshot.docs.map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            }))
+          );
+        });
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+        setError(error.message);
 
-    useEffect(() => {
-        return () => setCancelled(true);
-    }, []);
+        setLoading(false);
+      }
+    }
 
-    return { documents, loading, error };
-}
+    loadData();
+  }, [docCollection, search, uid, cancelled]);
+
+  useEffect(() => {
+    return () => setCancelled(true);
+  }, []);
+
+  return { documents, loading, error };
+};

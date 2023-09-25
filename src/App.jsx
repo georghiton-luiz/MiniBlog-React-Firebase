@@ -19,6 +19,7 @@ import LoginPage from './pages/Login/LoginPage';
 import RegisterPage from './pages/Register/RegisterPage';
 import CreatePostPage from './pages/CreatePost/CreatePostPage';
 import DashboardPage from './pages/Dashboard/DashboardPage';
+import SearchPage from './pages/Search/SearchPage';
 
 function App() {
 
@@ -40,24 +41,37 @@ function App() {
 
   return (
     <>
-    <AuthProvider value={{user}}>
-      <BrowserRouter>
-      <NavbarComponent />
-        <div className="container">
-          <Routes>
-            <Route path='/' element={<HomePage />} />
-            <Route path='/about' element={<AboutPage />} />
-            <Route path='/login' element={!user ? <LoginPage /> : <Navigate to="/" />} />
-            <Route path='/register' element={!user ? <RegisterPage /> : <Navigate to="/" />} />
-            <Route path='/posts/create' element={user ? <CreatePostPage /> : <Navigate to="/login" />} />
-            <Route path='/dashboard' element={user ? <DashboardPage /> : <Navigate to="/login" />} />
-          </Routes>
-        </div>
-        <FooterComponent />
-      </BrowserRouter>      
-    </AuthProvider>
+      <AuthProvider value={{ user }}>
+        <BrowserRouter>
+          <NavbarComponent />
+          <div className="container">
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/search" element={<SearchPage />} />
+              <Route
+                path="/login"
+                element={!user ? <LoginPage /> : <Navigate to="/" />}
+              />
+              <Route
+                path="/register"
+                element={!user ? <RegisterPage /> : <Navigate to="/" />}
+              />
+              <Route
+                path="/posts/create"
+                element={user ? <CreatePostPage /> : <Navigate to="/login" />}
+              />
+              <Route
+                path="/dashboard"
+                element={user ? <DashboardPage /> : <Navigate to="/login" />}
+              />
+            </Routes>
+          </div>
+          <FooterComponent />
+        </BrowserRouter>
+      </AuthProvider>
     </>
-  )
+  );
 }
 
 export default App
