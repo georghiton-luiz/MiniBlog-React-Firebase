@@ -45,10 +45,7 @@ const DashboardPage = () => {
                   <Link to={`/posts/${post.id}`} className="btn btn-outline">
                     Ver
                   </Link>
-                  <Link
-                    to={`/posts/edit/${post.id}`}
-                    className="btn btn-outline"
-                  >
+                  <Link to={`/posts/edit/${post.id}`} className="btn btn-outline">
                     Editar
                   </Link>
                   <button
